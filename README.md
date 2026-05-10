@@ -10,9 +10,11 @@ pip install -r requirements.txt
 
 Copy .env.example to .env and fill in your keys:
 - Groq: https://console.groq.com → API Keys
-- Download Ollama and pull the required models:
-  ollama pull qwen2.5:3b
-  ollama pull mistral:7b-instruct
+
+## Install local fallback models (Ollama)
+
+ollama pull qwen2.5:3b
+ollama pull mistral:7b-instruct
 
 ## Add your data
 
