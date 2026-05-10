@@ -1,0 +1,10 @@
+openai>=1.30.0
+pandas>=2.0.0
+plotly>=5.18.0
+gradio>=5.0.0
+python-dotenv>=1.0.0
+numpy>=1.26.0
+scipy>=1.11.0
+kaleido>=0.2.1
+reportlab>=4.0.0
+tiktoken>=0.7.0

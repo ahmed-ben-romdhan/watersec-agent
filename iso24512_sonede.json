@@ -1,0 +1,127 @@
+{
+  "sonede_tariffs": {
+    "description": "SONEDE residential water tariffs Tunisia 2024",
+    "currency": "TND",
+    "unit": "per m3 (1000 litres)",
+    "tiers": [
+      {"tier": 1, "min_m3": 0,   "max_m3": 20,  "price_per_m3": 0.190, "label": "Social (0–20 m³)"},
+      {"tier": 2, "min_m3": 20,  "max_m3": 40,  "price_per_m3": 0.332, "label": "Normal (20–40 m³)"},
+      {"tier": 3, "min_m3": 40,  "max_m3": 70,  "price_per_m3": 0.565, "label": "Comfort (40–70 m³)"},
+      {"tier": 4, "min_m3": 70,  "max_m3": 999, "price_per_m3": 0.845, "label": "Excessive (>70 m³)"}
+    ],
+    "fixed_fee_TND": 1.500,
+    "notes": "Prices per m3 excl. fixed subscription fee. 1 m3 = 1000 litres."
+  },
+  "sonede_commercial": {
+    "description": "SONEDE commercial/industrial tariff (gym, offices, sanitary bloc)",
+    "currency": "TND",
+    "unit": "per m3",
+    "price_per_m3": 0.845,
+    "fixed_fee_TND": 5.000,
+    "notes": "Flat commercial rate applies to gym, customerA, customerB."
+  },
+  "iso24512_kpis": {
+    "description": "ISO 24512:2007 Water service management KPIs with benchmark thresholds",
+    "standard": "ISO 24512:2007 — Activities relating to drinking water and wastewater services",
+    "kpis": [
+      {
+        "id": "W1",
+        "name": "Water losses (Non-Revenue Water)",
+        "description": "% of water produced that does not generate revenue (leaks, unbilled use)",
+        "unit": "%",
+        "excellent": "<10",
+        "acceptable": "10–25",
+        "poor": ">25",
+        "watersec_computable": true,
+        "how": "Flag events with z-score > 2.5 and duration > 60 min as suspected leaks; sum their volume as % of total"
+      },
+      {
+        "id": "W2",
+        "name": "Service continuity",
+        "description": "Hours per year with uninterrupted water supply",
+        "unit": "hours/year",
+        "excellent": "8760 (continuous)",
+        "acceptable": ">8000",
+        "poor": "<8000",
+        "watersec_computable": false,
+        "requires": "Pressure sensor data or supply schedule"
+      },
+      {
+        "id": "W3",
+        "name": "Water quality compliance",
+        "description": "% of samples meeting drinking water quality standards",
+        "unit": "%",
+        "excellent": "100",
+        "acceptable": ">99",
+        "poor": "<99",
+        "watersec_computable": false,
+        "requires": "Water quality sensor (turbidity, chlorine, pH)"
+      },
+      {
+        "id": "W4",
+        "name": "Specific daily consumption",
+        "description": "Average litres consumed per person per day",
+        "unit": "L/person/day",
+        "excellent": "100–150",
+        "acceptable": "80–200",
+        "poor": "<80 or >200",
+        "watersec_computable": true,
+        "how": "query_data(group_by='day') / estimated occupancy per site"
+      },
+      {
+        "id": "W5",
+        "name": "Peak day factor",
+        "description": "Ratio of max daily consumption to average daily consumption",
+        "unit": "ratio",
+        "excellent": "<1.5",
+        "acceptable": "1.5–2.5",
+        "poor": ">2.5",
+        "watersec_computable": true,
+        "how": "max(daily_consumption) / mean(daily_consumption) from query_data"
+      },
+      {
+        "id": "W6",
+        "name": "Anomaly response time",
+        "description": "Time between anomaly detection and corrective action",
+        "unit": "hours",
+        "excellent": "<1",
+        "acceptable": "1–4",
+        "poor": ">4",
+        "watersec_computable": true,
+        "how": "detect_anomalies provides timestamp; WaterSec alert fires immediately on detection"
+      },
+      {
+        "id": "W7",
+        "name": "Metering rate",
+        "description": "% of connections with individual metering",
+        "unit": "%",
+        "excellent": "100",
+        "acceptable": ">90",
+        "poor": "<90",
+        "watersec_computable": true,
+        "how": "gym=100% (8 sensors/8 outlets), customerC=100% (7 sensors), customerA=partial, customerB=low (1 sensor/9+ fixtures)"
+      },
+      {
+        "id": "W8",
+        "name": "Average flow rate efficiency",
+        "description": "Mean flow rate vs. fixture design spec (shower: 8 L/min, tap: 6 L/min, flush: 6 L/flush)",
+        "unit": "L/min",
+        "benchmarks": {
+          "shower": {"target": 8.0, "low_flow": 6.0, "wasteful": 12.0},
+          "flush":  {"target": 6.0, "low_flow": 4.5, "wasteful": 9.0},
+          "sink":   {"target": 2.0, "low_flow": 1.5, "wasteful": 4.0},
+          "tap":    {"target": 3.0, "low_flow": 2.0, "wasteful": 6.0}
+        },
+        "watersec_computable": true,
+        "how": "query_data returns flow_rate_Lpm — compare to benchmarks above per sub_category"
+      }
+    ]
+  },
+  "site_occupancy_estimates": {
+    "description": "Estimated occupancy for W4 KPI calculation",
+    "gym":       {"daily_users": 80,  "type": "commercial", "peak_hours": "07-09,17-19"},
+    "customerA": {"daily_users": 50,  "type": "office",     "peak_hours": "08-12,13-17"},
+    "customerB": {"daily_users": 120, "type": "public",     "peak_hours": "09-12,13-18"},
+    "customerC": {"daily_users": 4,   "type": "residential","peak_hours": "06-08,18-22"}
+  }
+}
